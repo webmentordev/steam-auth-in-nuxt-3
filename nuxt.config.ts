@@ -11,11 +11,9 @@ export default defineNuxtConfig({
     }
   },
   runtimeConfig: {
-    "api": process.env.APIKEY,
-    "success": "http://localhost:3000/success",
     public: {
       "api": process.env.APIKEY,
-      "success": "http://localhost:3000/success"
+      "domain": process.env.DOMAIN
     }
   }
 })

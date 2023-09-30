@@ -1,7 +1,10 @@
 <template>
     <div class="max-w-4xl m-auto py-6 px-4">
         <div v-if="myData">
-            <h1 class="text-3xl font-semibold mb-3 py-3 px-4 bg-gray-100 rounded-lg">Welcome to your Steam profile 👋</h1>
+            <div class="flex justify-between items-center mb-3 py-3 px-4 bg-gray-100 rounded-lg">
+                <h1 class="text-3xl font-semibold">Welcome to your Steam profile 👋</h1>
+                <button @click="logout" class="bg-orange-500 text-dark font-bold py-2 px-5 rounded-md">Logout</button>
+            </div>
             <div class="flex mb-3">
                 <img :src="myData.avatarfull" class="h-fit rounded-md" alt="My Image">
                 <div class="ml-3 py-4">
@@ -22,7 +25,7 @@
                 </ul>
             </div>
         </div>
-        <p class="text-center" v-else>{{ message }}</p>
+        <p v-else class="flex mb-3 items-center w-fit m-auto scale-110 font-semibold bg-black p-2 px-6 rounded-md text-white"><Icon name="svg-spinners:270-ring" class="mr-2" /> {{ message }}</p>
     </div>
 </template>
 
@@ -31,24 +34,25 @@
     const config = useRuntimeConfig();
     const myData = ref(null);
     const stats = ref(null);
+    const route = useRoute();
     onMounted(async () => {
-        const params = new URLSearchParams(window.location.search);
-        const openidMode = params.get('openid.mode');
-        if (openidMode === 'id_res') {
-            const steamId = params.get('openid.claimed_id').replace('https://steamcommunity.com/openid/id/', '');
-            message.value = "Login Success";
-            const data = await $fetch(`https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${config.public.api}&steamids=${steamId}`);
+        if(route.params.id.length == 17){
+            const data = await $fetch(`https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${config.public.api}&steamids=${route.params.id}`);
 
-            const stats_result = await $fetch(`https://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v0002/?appid=730&key=${config.public.api}&steamid=${steamId}`);
+            const stats_result = await $fetch(`https://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v0002/?appid=730&key=${config.public.api}&steamid=${route.params.id}`);
 
             myData.value = data.response.players[0];
             stats.value = stats_result.playerstats.stats;
-            
+
             useHead({
                 title: `${myData.value.personaname}'s Profile`
             })
-        } else {
-            message.value = "Steam login failed";
+        }else{
+            return navigateTo('/');
         }
     });
+
+    function logout(){
+        return navigateTo('/');
+    }
 </script>

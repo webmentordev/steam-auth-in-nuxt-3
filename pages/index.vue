@@ -9,10 +9,12 @@
 
 <script setup>
     const config = useRuntimeConfig()
-    const redirectUri = config.public.success;
+    const domain = config.public.domain;
+    useHead({
+        title: `Steam Authentication — Nuxt 3`
+    })
     function loginHandler(){
-        const url = `https://steamcommunity.com/openid/login?openid.ns=http://specs.openid.net/auth/2.0&openid.mode=checkid_setup&openid.return_to=${encodeURIComponent(redirectUri)}&openid.realm=${encodeURIComponent('http://localhost:3000/')}&openid.identity=http://specs.openid.net/auth/2.0/identifier_select&openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select`;
+        const url = `https://steamcommunity.com/openid/login?openid.ns=http://specs.openid.net/auth/2.0&openid.mode=checkid_setup&openid.return_to=${encodeURIComponent(domain+'/processing')}&openid.realm=${encodeURIComponent(domain)}&openid.identity=http://specs.openid.net/auth/2.0/identifier_select&openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select`;
         return navigateTo(url, { external: true });
     }
-    
 </script>
