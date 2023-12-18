@@ -1,3 +1,7 @@
+# PLEASE DO NOT USE THIS PROJECT IN PRODUCTION
+I built this project as a hobby and it is not a secure system. I was just testing how the steam auth works in nuxt. Just working.
+
+
 # About This System
 
 This system is built in Nuxt 3 without any server API (Express, etc.). It is simple, involving login and displaying user information with no complex database connections. If you want to explore more with the system, feel free to do so.  
